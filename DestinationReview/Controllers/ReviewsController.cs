@@ -17,13 +17,21 @@ namespace DestinationReview.Controllers
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Review>> Get(string rating)
+    public ActionResult<IEnumerable<Review>> Get(string rating, string country, string city)
     {
-      var query = _db.Reviews.AsQueryable();
+      var query = _db.Reviews.Include(review => review.Destination).AsQueryable();
       if (rating != null)
       {
         int searchRating = int.Parse(rating);
         query = query.Where(entry => entry.Rating == searchRating);
+      }
+      if(country != null)
+      {
+        query = query.Where(entry => entry.Destination.Country == country);
+      }
+      if(city != null)
+      {
+        query = query.Where(entry => entry.Destination.City == city);
       }
       return query.ToList();
     }
@@ -38,7 +46,9 @@ namespace DestinationReview.Controllers
     [HttpGet("{id}")]
     public ActionResult<Review> Get(int id)
     {
-      return _db.Reviews.FirstOrDefault(entry => entry.ReviewId == id);
+      return _db.Reviews
+        .Include(review => review.Destination)
+        .FirstOrDefault(entry => entry.ReviewId == id);
     }
 
     [HttpPut("{id}")]

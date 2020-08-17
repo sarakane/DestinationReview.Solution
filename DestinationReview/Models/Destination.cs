@@ -6,11 +6,21 @@ namespace DestinationReview.Models
 {
   public class Destination
   {
+    public Destination()
+    {
+      this.Reviews = new HashSet<Review>();
+    }
     public int DestinationId { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
-    public virtual ICollection<Review> Reviews {get; set;}
-    public int ReviewNumber { get { return Reviews.Count;}}
+    public ICollection<Review> Reviews {get; set;}
+    public int ReviewNumber 
+    { 
+      get 
+      { 
+        return Reviews.Count;
+      }
+    }
     public double ReviewAverage 
     { 
       get 
