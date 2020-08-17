@@ -10,5 +10,6 @@ namespace DestinationReview.Models
     }
 
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<Destination> Destinations { get; set; }
   }
 }
