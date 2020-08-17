@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using DestinationReview.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DestinationReview.Controllers
 {
@@ -20,7 +21,7 @@ namespace DestinationReview.Controllers
     public ActionResult<IEnumerable<Destination>> Get(string country, string city)
     {
       var query = _db.Destinations.Include(destination => destination.Reviews).AsQueryable();
-        //.ThenInclude(destination => destination.Reviews);
+
       if (country != null)
       {
         query = query.Where(entry => entry.Country == country);
@@ -30,6 +31,15 @@ namespace DestinationReview.Controllers
         query = query.Where(entry => entry.City == city);
       }
       return query.ToList();
+    }
+
+    [HttpGet("top")]
+    public ActionResult<Destination> Get()
+    {
+      return _db.Destinations
+        .Include(destination => destination.Reviews)
+        //.Where(destination => destination.ReviewNumber == Math.Max(destination.ReviewNumber)).ToList();
+        .OrderBy(destination => destination.ReviewNumber).First();
     }
 
     [HttpPost]
