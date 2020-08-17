@@ -17,9 +17,15 @@ namespace DestinationReview.Controllers
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Review>> Get()
+    public ActionResult<IEnumerable<Review>> Get(string rating)
     {
-      return _db.Reviews.ToList();
+      var query = _db.Reviews.AsQueryable();
+      if (rating != null)
+      {
+        int searchRating = int.Parse(rating);
+        query = query.Where(entry => entry.Rating == searchRating);
+      }
+      return query.ToList();
     }
 
     [HttpPost]
