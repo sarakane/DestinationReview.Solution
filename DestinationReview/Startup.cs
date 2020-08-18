@@ -24,6 +24,30 @@ namespace DestinationReview
                 opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMvc().AddJsonOptions( options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            // services.AddTransient<IUserService, UserService>();
+            // services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
+
+            // var authOptions = Configuration.GetSections("AuthOptions").Get<AuthOptions>();
+
+            // services.AddAuthentication(options =>
+            // {
+            //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            // }).AddJwtBearer(options =>
+            // {
+            //     options.TokenValidationParameters = new TokenValidationsParameters
+            //     {
+            //         ValidateIssuer = true,
+            //         ValidateAudience = true,
+            //         ValidateLifetime = true,
+            //         RequireExpirationTime = true,
+            //         ValidIssuer = authOptions.Issuer,
+            //         ValidAudience = authOptions.Audience,
+            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.SecureKey))
+            //     };
+            // });
+
+            // services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

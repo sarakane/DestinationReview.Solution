@@ -9,36 +9,34 @@ namespace DestinationReview.Models
     public Destination()
     {
       this.Reviews = new HashSet<Review>();
+      
     }
     public int DestinationId { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
+    public int ReviewNumber { get; set; }
+    public double ReviewAverage { get; set; }
     public ICollection<Review> Reviews {get; set;}
-    public int ReviewNumber 
+    public void GetReviewNumber()
     { 
-      get 
-      { 
-        return Reviews.Count;
-      }
+      this.ReviewNumber = Reviews.Count;
     }
-    public double ReviewAverage 
+
+    public void GetReviewAverage() 
     { 
-      get 
+      if(Reviews.Count != 0)
       {
-        if(Reviews.Count != 0)
+        double sum = 0;
+        foreach(var review in Reviews)
         {
-          double sum = 0;
-          foreach(var review in Reviews)
-          {
-            sum += review.Rating;
-          }
-          return sum/Reviews.Count;
+          sum += review.Rating;
         }
-        else
-        {
-            return (double)0;
-        }
+        this.ReviewAverage = sum/Reviews.Count;
       }
+      else
+      {
+        this.ReviewAverage = (double)0;
+      }  
     }
   }
 }
