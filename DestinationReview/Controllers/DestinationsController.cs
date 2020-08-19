@@ -38,8 +38,15 @@ namespace DestinationReview.Controllers
     {
       return _db.Destinations
         .Include(destination => destination.Reviews)
-        //.Where(destination => destination.ReviewNumber == Math.Max(destination.ReviewNumber)).ToList();
-        .OrderBy(destination => destination.ReviewNumber).First();
+        .OrderByDescending(destination => destination.ReviewNumber).FirstOrDefault();
+    }
+
+    [HttpGet("best")]
+    public ActionResult<Destination> GetBest()
+    { 
+      return _db.Destinations
+        .Include(destination => destination.Reviews)
+        .OrderByDescending(destination => destination.ReviewAverage).FirstOrDefault();
     }
 
     [HttpPost]

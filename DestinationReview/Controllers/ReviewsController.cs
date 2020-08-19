@@ -41,6 +41,11 @@ namespace DestinationReview.Controllers
     {
       _db.Reviews.Add(review);
       _db.SaveChanges();
+      var thisDestination = _db.Destinations.Include(destination => destination.Reviews).FirstOrDefault(destination => destination.DestinationId == review.DestinationId);
+      thisDestination.GetReviewNumber();
+      thisDestination.GetReviewAverage();
+      _db.Entry(thisDestination).State = EntityState.Modified;
+      _db.SaveChanges();
     }
 
     [HttpGet("{id}")]
@@ -55,7 +60,11 @@ namespace DestinationReview.Controllers
     public void Put(int id, [FromBody] Review review)
     {
       review.ReviewId = id;
+      var thisDestination = _db.Destinations.Include(destination => destination.Reviews).FirstOrDefault(destination => destination.DestinationId == review.DestinationId);
       _db.Entry(review).State = EntityState.Modified;
+      _db.SaveChanges();
+      thisDestination.GetReviewAverage();
+      _db.Entry(thisDestination).State = EntityState.Modified;
       _db.SaveChanges();
     }
 
@@ -63,7 +72,12 @@ namespace DestinationReview.Controllers
     public void Delete(int id)
     {
       var reviewToDelete = _db.Reviews.FirstOrDefault(entry => entry.ReviewId == id);
+      var thisDestination = _db.Destinations.Include(destination => destination.Reviews).FirstOrDefault(destination => destination.DestinationId == reviewToDelete.DestinationId);
       _db.Reviews.Remove(reviewToDelete);
+      _db.SaveChanges();
+      thisDestination.GetReviewNumber();
+      thisDestination.GetReviewAverage();
+      _db.Entry(thisDestination).State = EntityState.Modified;
       _db.SaveChanges();
     }
   }
