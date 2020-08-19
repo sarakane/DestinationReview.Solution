@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using DestinationReview.Models;
 using System.Collections.Generic;
 
 namespace DestinationReview.Models
@@ -16,6 +14,8 @@ namespace DestinationReview.Models
     public string City { get; set; }
     public int ReviewNumber { get; set; }
     public double ReviewAverage { get; set; }
+    public int UserId { get; set; }
+    // public virtual User User { get; set; }
     public ICollection<Review> Reviews {get; set;}
     public void GetReviewNumber()
     { 

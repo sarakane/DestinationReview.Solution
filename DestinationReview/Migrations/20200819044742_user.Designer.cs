@@ -3,14 +3,16 @@ using System;
 using DestinationReview.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DestinationReview.Migrations
 {
     [DbContext(typeof(DestinationReviewContext))]
-    partial class DestinationReviewContextModelSnapshot : ModelSnapshot
+    [Migration("20200819044742_user")]
+    partial class user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,11 +32,7 @@ namespace DestinationReview.Migrations
 
                     b.Property<int>("ReviewNumber");
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("DestinationId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Destinations");
                 });
@@ -55,13 +53,9 @@ namespace DestinationReview.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("ReviewId");
 
                     b.HasIndex("DestinationId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
                 });
@@ -86,24 +80,11 @@ namespace DestinationReview.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DestinationReview.Models.Destination", b =>
-                {
-                    b.HasOne("DestinationReview.Models.User", "User")
-                        .WithMany("Destinations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("DestinationReview.Models.Review", b =>
                 {
                     b.HasOne("DestinationReview.Models.Destination", "Destination")
                         .WithMany("Reviews")
                         .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DestinationReview.Models.User", "User")
-                        .WithMany("Reviews")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

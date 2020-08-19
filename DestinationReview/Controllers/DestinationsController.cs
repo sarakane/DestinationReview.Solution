@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using DestinationReview.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DestinationReview.Controllers
 {
@@ -49,9 +49,11 @@ namespace DestinationReview.Controllers
         .OrderByDescending(destination => destination.ReviewAverage).FirstOrDefault();
     }
 
+    [Authorize]
     [HttpPost]
     public void Post([FromBody] Destination destination)
     {
+      destination.UserId = int.Parse(User.Identity.Name);
       _db.Destinations.Add(destination);
       _db.SaveChanges();
     }
@@ -64,20 +66,28 @@ namespace DestinationReview.Controllers
         .FirstOrDefault(entry => entry.DestinationId == id);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Destination destination)
     {
       destination.DestinationId = id;
-      _db.Entry(destination).State = EntityState.Modified;
-      _db.SaveChanges();
+      if (destination.UserId == int.Parse(User.Identity.Name))
+      {
+        _db.Entry(destination).State = EntityState.Modified;
+        _db.SaveChanges();
+      }
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
       var destinationToDelete = _db.Destinations.FirstOrDefault(entry => entry.DestinationId == id);
-      _db.Destinations.Remove(destinationToDelete);
-      _db.SaveChanges();
+      if (destinationToDelete.UserId == int.Parse(User.Identity.Name))
+      {
+        _db.Destinations.Remove(destinationToDelete);
+        _db.SaveChanges();
+      }
     }
   }
 }

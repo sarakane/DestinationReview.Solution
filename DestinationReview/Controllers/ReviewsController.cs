@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using DestinationReview.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DestinationReview.Controllers
 {
@@ -36,9 +37,11 @@ namespace DestinationReview.Controllers
       return query.ToList();
     }
 
+    [Authorize]
     [HttpPost]
     public void Post([FromBody] Review review)
     {
+      review.UserId = int.Parse(User.Identity.Name);
       _db.Reviews.Add(review);
       _db.SaveChanges();
       var thisDestination = _db.Destinations.Include(destination => destination.Reviews).FirstOrDefault(destination => destination.DestinationId == review.DestinationId);
@@ -56,29 +59,37 @@ namespace DestinationReview.Controllers
         .FirstOrDefault(entry => entry.ReviewId == id);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Review review)
     {
       review.ReviewId = id;
       var thisDestination = _db.Destinations.Include(destination => destination.Reviews).FirstOrDefault(destination => destination.DestinationId == review.DestinationId);
-      _db.Entry(review).State = EntityState.Modified;
-      _db.SaveChanges();
-      thisDestination.GetReviewAverage();
-      _db.Entry(thisDestination).State = EntityState.Modified;
-      _db.SaveChanges();
+      if (review.UserId == int.Parse(User.Identity.Name))
+      {
+        _db.Entry(review).State = EntityState.Modified;
+        _db.SaveChanges();
+        thisDestination.GetReviewAverage();
+        _db.Entry(thisDestination).State = EntityState.Modified;
+        _db.SaveChanges();
+      }
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
       var reviewToDelete = _db.Reviews.FirstOrDefault(entry => entry.ReviewId == id);
       var thisDestination = _db.Destinations.Include(destination => destination.Reviews).FirstOrDefault(destination => destination.DestinationId == reviewToDelete.DestinationId);
-      _db.Reviews.Remove(reviewToDelete);
-      _db.SaveChanges();
-      thisDestination.GetReviewNumber();
-      thisDestination.GetReviewAverage();
-      _db.Entry(thisDestination).State = EntityState.Modified;
-      _db.SaveChanges();
+      if (reviewToDelete.UserId == int.Parse(User.Identity.Name))
+      {
+        _db.Reviews.Remove(reviewToDelete);
+        _db.SaveChanges();
+        thisDestination.GetReviewNumber();
+        thisDestination.GetReviewAverage();
+        _db.Entry(thisDestination).State = EntityState.Modified;
+        _db.SaveChanges();
+      }
     }
   }
 }
