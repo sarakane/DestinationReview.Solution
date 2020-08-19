@@ -17,6 +17,9 @@ namespace DestinationReview.Controllers
       _db = db;
     }
 
+    ///<summary>
+    ///Retreives all reviews from the database, filterable by country, city or both.
+    ///</summary>
     [HttpGet]
     public ActionResult<IEnumerable<Review>> Get(string rating, string country, string city)
     {
@@ -37,6 +40,9 @@ namespace DestinationReview.Controllers
       return query.ToList();
     }
 
+    ///<summary>
+    ///Adds a review to the database.
+    ///</summary>
     [Authorize]
     [HttpPost]
     public void Post([FromBody] Review review)
@@ -51,6 +57,9 @@ namespace DestinationReview.Controllers
       _db.SaveChanges();
     }
 
+    ///<summary>
+    ///Retreives a review from the database by id number.
+    ///</summary>
     [HttpGet("{id}")]
     public ActionResult<Review> Get(int id)
     {
@@ -59,6 +68,9 @@ namespace DestinationReview.Controllers
         .FirstOrDefault(entry => entry.ReviewId == id);
     }
 
+    ///<summary>
+    ///Updates a review.
+    ///</summary>
     [Authorize]
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Review review)
@@ -75,6 +87,9 @@ namespace DestinationReview.Controllers
       }
     }
 
+    ///<summary>
+    ///Removes a review from the database.
+    ///</summary>
     [Authorize]
     [HttpDelete("{id}")]
     public void Delete(int id)

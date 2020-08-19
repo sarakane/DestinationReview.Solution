@@ -16,7 +16,9 @@ namespace DestinationReview.Controllers
     {
       _db = db;
     }
-
+    ///<summary>
+    ///Retreives all destinations from the database, filterable by country, city or both.
+    ///</summary>
     [HttpGet]
     public ActionResult<IEnumerable<Destination>> Get(string country, string city)
     {
@@ -33,6 +35,9 @@ namespace DestinationReview.Controllers
       return query.ToList();
     }
 
+    ///<summary>
+    ///Retreives the most visited destination by number of reviews.
+    ///</summary>
     [HttpGet("top")]
     public ActionResult<Destination> Get()
     {
@@ -41,6 +46,9 @@ namespace DestinationReview.Controllers
         .OrderByDescending(destination => destination.ReviewNumber).FirstOrDefault();
     }
 
+    ///<summary>
+    ///Retreives the destination with the highest average review rating.
+    ///</summary>
     [HttpGet("best")]
     public ActionResult<Destination> GetBest()
     { 
@@ -49,6 +57,19 @@ namespace DestinationReview.Controllers
         .OrderByDescending(destination => destination.ReviewAverage).FirstOrDefault();
     }
 
+    ///<summary>
+    ///Adds a destination to the database.
+    ///</summary>
+    ///<remarks>
+    ///Sample request:
+    ///
+    ///     POST /Destination
+    ///     {
+    ///         "country": "Canada",
+    ///         "city": "Vancouver"
+    ///     }
+    ///
+    ///</remarks>
     [Authorize]
     [HttpPost]
     public void Post([FromBody] Destination destination)
@@ -58,6 +79,9 @@ namespace DestinationReview.Controllers
       _db.SaveChanges();
     }
 
+    ///<summary>
+    ///Retreives a destination from the database by id number.
+    ///</summary>
     [HttpGet("{id}")]
     public ActionResult<Destination> Get(int id)
     {
@@ -66,6 +90,9 @@ namespace DestinationReview.Controllers
         .FirstOrDefault(entry => entry.DestinationId == id);
     }
 
+    ///<summary>
+    ///Updates a destination.
+    ///</summary>
     [Authorize]
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Destination destination)
@@ -78,6 +105,9 @@ namespace DestinationReview.Controllers
       }
     }
 
+    ///<summary>
+    ///Removes a destination from the database.
+    ///</summary>
     [Authorize]
     [HttpDelete("{id}")]
     public void Delete(int id)
