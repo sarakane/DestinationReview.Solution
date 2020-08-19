@@ -10,6 +10,7 @@ namespace DestinationReview.Helpers
     {
       CreateMap<UserDto, UserDto>();
       CreateMap<UserDto, User>();
+      CreateMap<User, UserDto>();
     }
   }
 }

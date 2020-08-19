@@ -16,7 +16,7 @@ namespace DestinationReview.Controllers
 {
   [Authorize]
   [ApiController]
-  [Route("[Controller]")]
+  [Route("api/[Controller]")]
   public class UsersController : ControllerBase
   {
     private IUserService _userService;
@@ -78,6 +78,7 @@ namespace DestinationReview.Controllers
       }
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -85,6 +86,7 @@ namespace DestinationReview.Controllers
       return Ok(users);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {

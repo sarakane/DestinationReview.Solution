@@ -15,6 +15,6 @@ namespace DestinationReview.Models
     public int DestinationId { get; set; }
     public int UserId { get; set; }
     public virtual Destination Destination { get; set; }
-    // public virtual User User { get; set; }
+    public virtual User User { get; set; }
   }
 }
