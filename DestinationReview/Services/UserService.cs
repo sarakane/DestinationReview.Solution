@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DestinationReview.Models;
 using DestinationReview.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace DestinationReview.Services
 {
@@ -49,7 +50,7 @@ namespace DestinationReview.Services
 
         public User GetById(int id)
         {
-            return _context.Users.Find(id);
+            return _context.Users.Include(user => user.Reviews).Include(user => user.Destinations).FirstOrDefault(user => user.Id == id);
         }
 
         public User Create(User user, string password)
